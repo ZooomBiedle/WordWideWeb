@@ -7,6 +7,8 @@
 
 import UIKit
 
+
+// 단어장 데이터가 없을 때(0) 나타나는 메시지
 extension UICollectionView {
 
     func setEmptyMsg(_ msg: String) {
@@ -15,7 +17,7 @@ extension UICollectionView {
             label.text = "현재 만들어진 단어장이 없습니다."
             label.textColor = .black
             label.numberOfLines = 0
-            label.textAlignment = .center;
+            label.textAlignment = .center
             label.font = UIFont.pretendard(size: 18, weight: .regular)
             label.sizeToFit()
             return label

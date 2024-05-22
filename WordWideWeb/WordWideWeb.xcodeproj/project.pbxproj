@@ -69,6 +69,7 @@
 		9C1F0FDC2BFC66D1002D680D /* InvitationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1F0FDB2BFC66D1002D680D /* InvitationData.swift */; };
 		9C1F0FDE2BFCB33F002D680D /* DefaultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1F0FDD2BFCB33F002D680D /* DefaultTableViewCell.swift */; };
 		9C1F0FE02BFCB351002D680D /* ExpandableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1F0FDF2BFCB351002D680D /* ExpandableTableViewCell.swift */; };
+		9C1F0FE22BFDCEC4002D680D /* InvitedFriendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1F0FE12BFDCEC4002D680D /* InvitedFriendCell.swift */; };
 		F410EB902BF329980075BA50 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F410EB8F2BF329980075BA50 /* AppDelegate.swift */; };
 		F410EB922BF329980075BA50 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F410EB912BF329980075BA50 /* SceneDelegate.swift */; };
 		F410EB942BF329980075BA50 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F410EB932BF329980075BA50 /* ViewController.swift */; };
@@ -136,7 +137,6 @@
 		9C1F0FC52BFBA9E6002D680D /* CarouselLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselLayout.swift; sourceTree = "<group>"; };
 		9C1F0FC72BFBAA1A002D680D /* MyPage+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MyPage+Ext.swift"; sourceTree = "<group>"; };
 		9C1F0FC92BFBAAB4002D680D /* CollectionView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CollectionView+Ext.swift"; sourceTree = "<group>"; };
-		9C1F0FCB2BFBAB9B002D680D /* PageControlViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageControlViewController.swift; sourceTree = "<group>"; };
 		9C1F0FCD2BFBABE5002D680D /* MyPageWordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageWordViewController.swift; sourceTree = "<group>"; };
 		9C1F0FCF2BFBAC25002D680D /* MyPageModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageModalViewController.swift; sourceTree = "<group>"; };
 		9C1F0FD12BFBAC5F002D680D /* MyPageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -147,6 +147,7 @@
 		9C1F0FDB2BFC66D1002D680D /* InvitationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitationData.swift; sourceTree = "<group>"; };
 		9C1F0FDD2BFCB33F002D680D /* DefaultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultTableViewCell.swift; sourceTree = "<group>"; };
 		9C1F0FDF2BFCB351002D680D /* ExpandableTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableTableViewCell.swift; sourceTree = "<group>"; };
+		9C1F0FE12BFDCEC4002D680D /* InvitedFriendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitedFriendCell.swift; sourceTree = "<group>"; };
 		F410EB8C2BF329980075BA50 /* WordWideWeb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WordWideWeb.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F410EB8F2BF329980075BA50 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F410EB912BF329980075BA50 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -172,10 +173,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A8447232BF3631100AE319A /* FirebaseDatabaseSwift in Frameworks */,
+				B9F7CEA62BFC27DC00DEF732 /* SnapKit in Frameworks */,
 				2AA413D92BF3D17100C34FEB /* GoogleSignIn in Frameworks */,
 				2A84471B2BF3631100AE319A /* FirebaseAnalyticsSwift in Frameworks */,
 				F410EBBD2BF34F790075BA50 /* SDWebImage in Frameworks */,
-				F410EBB82BF34F540075BA50 /* SnapKit in Frameworks */,
 				F410EBBF2BF34F790075BA50 /* SDWebImageMapKit in Frameworks */,
 				2A8447192BF3631100AE319A /* FirebaseAnalytics in Frameworks */,
 				2A84471D2BF3631100AE319A /* FirebaseAuth in Frameworks */,
@@ -183,7 +184,6 @@
 				2AA413DB2BF3D17100C34FEB /* GoogleSignInSwift in Frameworks */,
 				2A8447292BF3631100AE319A /* FirebaseFirestoreSwift in Frameworks */,
 				2A8447212BF3631100AE319A /* FirebaseDatabase in Frameworks */,
-				F410EBBA2BF34F540075BA50 /* SnapKit-Dynamic in Frameworks */,
 				2A8447272BF3631100AE319A /* FirebaseFirestoreCombine-Community in Frameworks */,
 				2A84472B2BF3631100AE319A /* FirebaseStorage in Frameworks */,
 				2A8447252BF3631100AE319A /* FirebaseFirestore in Frameworks */,
@@ -283,6 +283,7 @@
 				9C1F0FC52BFBA9E6002D680D /* CarouselLayout.swift */,
 				9C1F0FDD2BFCB33F002D680D /* DefaultTableViewCell.swift */,
 				9C1F0FDF2BFCB351002D680D /* ExpandableTableViewCell.swift */,
+				9C1F0FE12BFDCEC4002D680D /* InvitedFriendCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -292,6 +293,9 @@
 			children = (
 				9C1F0FA32BF78C4A002D680D /* TabBarController.swift */,
 				9C1F0F9F2BF7332F002D680D /* MyPageVC.swift */,
+				9C1F0FD12BFBAC5F002D680D /* MyPageCollectionViewCell.swift */,
+				9C1F0FCD2BFBABE5002D680D /* MyPageWordViewController.swift */,
+				9C1F0FCF2BFBAC25002D680D /* MyPageModalViewController.swift */,
 				9C1F0F892BF5E02E002D680D /* PlayingListVC.swift */,
 				9C1F0F9B2BF6F4E8002D680D /* DictionaryVC.swift */,
 				9C1F0F9D2BF732EB002D680D /* InvitingVC.swift */,
@@ -305,9 +309,6 @@
 				9C1F0FBF2BFB94BA002D680D /* TestResultViewController.swift */,
 				9C1F0FC12BFB94EE002D680D /* TestViewController.swift */,
 				F4ECA7532BFC408A00CD24E6 /* PushNotificationHelper.swift */,
-				9C1F0FCD2BFBABE5002D680D /* MyPageWordViewController.swift */,
-				9C1F0FCF2BFBAC25002D680D /* MyPageModalViewController.swift */,
-				9C1F0FD12BFBAC5F002D680D /* MyPageCollectionViewCell.swift */,
 				9C1F0FD32BFBAC93002D680D /* EmptyCollectionViewCell.swift */,
 			);
 			path = Controller;
@@ -346,7 +347,6 @@
 				F410EBFB2BF5DDB80075BA50 /* BlockCell.swift */,
 				9C1F0FD52BFBAD52002D680D /* LabelFactory.swift */,
 				9C1F0FD72BFBAD75002D680D /* ImageFactory.swift */,
-				9C1F0FD92BFBADA2002D680D /* ButtonFactory.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -387,8 +387,6 @@
 			);
 			name = WordWideWeb;
 			packageProductDependencies = (
-				F410EBB72BF34F540075BA50 /* SnapKit */,
-				F410EBB92BF34F540075BA50 /* SnapKit-Dynamic */,
 				F410EBBC2BF34F790075BA50 /* SDWebImage */,
 				F410EBBE2BF34F790075BA50 /* SDWebImageMapKit */,
 				2A8447182BF3631100AE319A /* FirebaseAnalytics */,
@@ -404,6 +402,7 @@
 				2A84472C2BF3631100AE319A /* FirebaseStorageCombine-Community */,
 				2AA413D82BF3D17100C34FEB /* GoogleSignIn */,
 				2AA413DA2BF3D17100C34FEB /* GoogleSignInSwift */,
+				B9F7CEA52BFC27DC00DEF732 /* SnapKit */,
 			);
 			productName = WorldWordWeb;
 			productReference = F410EB8C2BF329980075BA50 /* WordWideWeb.app */;
@@ -434,10 +433,10 @@
 			);
 			mainGroup = F410EB832BF329980075BA50;
 			packageReferences = (
-				F410EBB62BF34F540075BA50 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				F410EBBB2BF34F790075BA50 /* XCRemoteSwiftPackageReference "SDWebImage" */,
 				2A8447172BF3631100AE319A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				2AA413D72BF3D17100C34FEB /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				B9F7CEA42BFC27DC00DEF732 /* XCRemoteSwiftPackageReference "SnapKit" */,
 			);
 			productRefGroup = F410EB8D2BF329980075BA50 /* Products */;
 			projectDirPath = "";
@@ -511,6 +510,7 @@
 				F410EC002BF72F620075BA50 /* TestIntroViewController.swift in Sources */,
 				2A1166012BFB723D000F61B0 /* WordbookCell.swift in Sources */,
 				2A8447142BF3590300AE319A /* Numeric.swift in Sources */,
+				9C1F0FE22BFDCEC4002D680D /* InvitedFriendCell.swift in Sources */,
 				9C1F0F9E2BF732EB002D680D /* InvitingVC.swift in Sources */,
 				9C1F0FA42BF78C4A002D680D /* TabBarController.swift in Sources */,
 				9C1F0FC42BFBA98C002D680D /* MyPage.swift in Sources */,
@@ -781,7 +781,7 @@
 				minimumVersion = 7.1.0;
 			};
 		};
-		F410EBB62BF34F540075BA50 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+		B9F7CEA42BFC27DC00DEF732 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
 			requirement = {
@@ -865,15 +865,10 @@
 			package = 2AA413D72BF3D17100C34FEB /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignInSwift;
 		};
-		F410EBB72BF34F540075BA50 /* SnapKit */ = {
+		B9F7CEA52BFC27DC00DEF732 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F410EBB62BF34F540075BA50 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			package = B9F7CEA42BFC27DC00DEF732 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
-		};
-		F410EBB92BF34F540075BA50 /* SnapKit-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F410EBB62BF34F540075BA50 /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = "SnapKit-Dynamic";
 		};
 		F410EBBC2BF34F790075BA50 /* SDWebImage */ = {
 			isa = XCSwiftPackageProductDependency;

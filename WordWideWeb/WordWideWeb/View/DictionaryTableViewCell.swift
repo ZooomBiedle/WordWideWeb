@@ -35,6 +35,7 @@ class DictionaryTableViewCell: UITableViewCell {
         return stv
     }()
     
+    var addButtonAction: (() -> Void)?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -104,21 +105,12 @@ class DictionaryTableViewCell: UITableViewCell {
     
     // MARK: - addButton
     func setAddButton(_ button: UIButton) {
-        let books = [
-            UIAction(title: "호텔 필수 영단어", image: UIImage(systemName: "star"), state: .on, handler: { _ in print("호텔") }),
-            UIAction(title: "개발자 필수 영단어", image: UIImage(systemName: "star"), state: .on, handler: { _ in print("개발자") }),
-            UIAction(title: "Cancel", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { _ in print("취소") })
-        ]
-                      
-        button.menu = UIMenu(title: "Add word book",
-                             image: UIImage(systemName: "plus"),
-                             identifier: nil,
-                             options: .displayInline,
-                             children: books)
-
-        self.addButton.showsMenuAsPrimaryAction = true
-        self.addButton.changesSelectionAsPrimaryAction = true         
+        button.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
     }
-   
+    
+    @objc private func addButtonTapped() {
+        addButtonAction?()
+    }
 }
+
 

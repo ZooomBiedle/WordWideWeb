@@ -8,16 +8,20 @@
 import Foundation
 import FirebaseFirestore
 
-struct User: Codable {
+struct User: Codable, Equatable {
     let uid: String
     let email: String
     let displayName: String?
     var photoURL: String?
     var socialMediaLink: String?
     let authProvider: AuthProviderOption
+    
+    static func == (lhs: User, rhs: User) -> Bool {
+        return lhs.uid == rhs.uid
+    }
 }
 
-struct Wordbook: Codable {
+struct Wordbook: Codable, Hashable {
     let id: String
     let ownerId: String
     let title: String
@@ -27,7 +31,16 @@ struct Wordbook: Codable {
     let attendees: [String]
     let sharedWith: [String]?
     let colorCover: String
-    let wordCount: Int
+    var wordCount: Int
+    var words: [Word]
+    
+    static func == (lhs: Wordbook, rhs: Wordbook) -> Bool {
+        return lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 }
 
 struct Word: Codable {
@@ -35,6 +48,17 @@ struct Word: Codable {
     let term: String
     let definition: String
 }
+
+struct Invitation: Codable {
+    let id: String
+    let from: String
+    let to: String
+    let wordbookId: String
+    let title: String
+    let timestamp: Timestamp
+    let dueDate: Timestamp?
+}
+
 
 extension UserDefaults {
     private enum Keys {
@@ -88,3 +112,4 @@ extension UserDefaults {
         set { set(newValue, forKey: Keys.appleDisplayName) }
     }
 }
+

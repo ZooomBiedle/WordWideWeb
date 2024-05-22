@@ -42,11 +42,21 @@ extension MyPageVC: UICollectionViewDelegate, UICollectionViewDataSource
         // myPageList에서 해당 인덱스의 아이템 가져오기
         let item = myPageList[indexPath.row]
         
-        // 셀의 wordLabel에 아이템의 title 설정
-        cell.wordLabel.text = item.word.joined() // 임시
+     
+        cell.wordButton.setTitle(item.word.joined(), for: .normal)  // 임시
         cell.titleLabel.text = item.title // 임시
         
         // 셀 반환
         return cell
     }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let myPageWordVC = MyPageWordViewController()
+        navigationController?.pushViewController(myPageWordVC, animated: true)
+//        myPageWordVC.modalPresentationStyle = .fullScreen
+//        self.present(myPageWordVC, animated: true)
+    }
+    
 }
+
+
+

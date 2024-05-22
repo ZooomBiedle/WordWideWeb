@@ -65,10 +65,11 @@ class MyInfoVC: UIViewController {
     
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 160, height: 160)
+        layout.minimumInteritemSpacing = 10
+        layout.minimumLineSpacing = 10
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.register(WordbookCell.self, forCellWithReuseIdentifier: "WordbookCell")
         return collectionView
     }()
     
@@ -104,6 +105,7 @@ class MyInfoVC: UIViewController {
         bindViewModel()
         
         NotificationCenter.default.addObserver(self, selector: #selector(userDidUpdate), name: .userProfileUpdated, object: nil)
+        segmentButtonTapped(buttons.first!)
     }
     
     deinit {
@@ -113,6 +115,7 @@ class MyInfoVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.fetchUserInfo()
+        fetchWordbooks()
     }
     
     private func bindViewModel() {
@@ -196,12 +199,12 @@ class MyInfoVC: UIViewController {
             make.top.equalTo(profileImageView.snp.bottom).offset(20)
             make.leading.equalTo(view).offset(20)
             make.height.equalTo(40)
-            make.trailing.equalTo(view.snp.centerX).offset(-10) // 너비를 유동적으로 설정
+            make.trailing.equalTo(view.snp.centerX).offset(-10)
         }
         
         logoutButton.snp.makeConstraints { make in
             make.top.equalTo(profileImageView.snp.bottom).offset(20)
-            make.leading.equalTo(view.snp.centerX).offset(10) // 너비를 유동적으로 설정
+            make.leading.equalTo(view.snp.centerX).offset(10)
             make.trailing.equalTo(view).offset(-20)
             make.height.equalTo(40)
             make.width.equalTo(profileButton.snp.width)
@@ -296,10 +299,16 @@ class MyInfoVC: UIViewController {
     
     // 단어장 불러오기
     private func fetchWordbooks() {
+        guard let user = Auth.auth().currentUser else {
+            print("No authenticated user found.")
+            return
+        }
+        
         Task {
             do {
-                let userId = Auth.auth().currentUser!.uid
+                let userId = user.uid
                 self.wordbooks = try await FirestoreManager.shared.fetchWordbooks(for: userId)
+                self.wordbooks.sort { $0.createdAt.dateValue() > $1.createdAt.dateValue() } // 생성 날짜로 정렬
                 self.collectionView.reloadData()
             } catch {
                 print("Error fetching wordbooks: \(error.localizedDescription)")
@@ -307,16 +316,40 @@ class MyInfoVC: UIViewController {
         }
     }
     
+    // 단어장 삭제
+    private func deleteWordbook(_ wordbook: Wordbook) {
+        Task {
+            do {
+                try await FirestoreManager.shared.deleteWordbook(withId: wordbook.id)
+                fetchWordbooks() // 삭제 후 단어장 목록 갱신
+            } catch {
+                print("Error deleting wordbook: \(error.localizedDescription)")
+            }
+        }
+    }
+
     @objc private func addWordBookButtonTapped() {
         let addWordBookVC = AddWordBookVC()
         addWordBookVC.modalPresentationStyle = .formSheet
         present(addWordBookVC, animated: true, completion: nil)
     }
     
+    // 삭제 확인 알림
+    private func showDeleteConfirmation(for wordbook: Wordbook) {
+        let alert = UIAlertController(title: "Delete Wordbook", message: "Are you sure you want to delete this wordbook?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
+            guard let self = self else { return }
+            self.deleteWordbook(wordbook)
+        }))
+        present(alert, animated: true, completion: nil)
+    }
+    
     private func setupCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(WordbookCell.self, forCellWithReuseIdentifier: "WordbookCell")
+        collectionView.showsVerticalScrollIndicator = false
     }
   
     @objc private func logoutTapped() {
@@ -325,7 +358,16 @@ class MyInfoVC: UIViewController {
             UserDefaults.standard.isLoggedIn = false
             UserDefaults.standard.isAutoLoginEnabled = false
             NotificationCenter.default.post(name: .userDidLogout, object: nil)
-            guard let sceneDelegate = view.window?.windowScene?.delegate as? SceneDelegate else { return }
+            
+            // view나 window가 nil인지 확인
+            guard let window = view.window else {
+                print("View's window is nil")
+                return
+            }
+            guard let sceneDelegate = window.windowScene?.delegate as? SceneDelegate else {
+                print("SceneDelegate is nil")
+                return
+            }
             sceneDelegate.setRootViewController()
         } catch {
             print("Error signing out: \(error.localizedDescription)")
@@ -335,7 +377,7 @@ class MyInfoVC: UIViewController {
 
 // MARK: 컬렉션뷰
 
-extension MyInfoVC: UICollectionViewDelegate, UICollectionViewDataSource {
+extension MyInfoVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return wordbooks.filter { $0.isPublic == isPublicView }.count
     }
@@ -345,6 +387,20 @@ extension MyInfoVC: UICollectionViewDelegate, UICollectionViewDataSource {
         let filteredWordbooks = wordbooks.filter { $0.isPublic == isPublicView }
         let wordbook = filteredWordbooks[indexPath.item]
         cell.configure(with: wordbook)
+        
+        cell.onDelete = { [weak self] in
+            guard let self = self else { return }
+            self.showDeleteConfirmation(for: wordbook)
+        }
+        
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let padding: CGFloat = 10
+        let collectionViewSize = collectionView.frame.size.width - padding
+        let cellWidth = collectionViewSize / 2 - padding
+        return CGSize(width: cellWidth, height: cellWidth)
+    }
 }
+

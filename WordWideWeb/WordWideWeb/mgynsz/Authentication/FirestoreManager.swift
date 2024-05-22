@@ -151,6 +151,17 @@ final class FirestoreManager {
         return try document.data(as: User.self)
     }
     
+    // 여러 사용자의 정보를 가져오는 메서드
+    func fetchUsers(uids: [String]) async throws -> [User] {
+        guard !uids.isEmpty else { return [] }
+        
+        let documents = try await db.collection("users")
+            .whereField("uid", in: uids)
+            .getDocuments()
+        
+        return documents.documents.compactMap { try? $0.data(as: User.self) }
+    }
+    
     // 이메일로 사용자 검색
     func searchUserByEmail(query: String) async throws -> [User] {
         let trimmedQuery = query.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -177,6 +188,37 @@ final class FirestoreManager {
         return snapshot.documents.compactMap { try? $0.data(as: User.self) }
     }
     
+    // 초대장 전송
+    func sendInvitation(to recipientUID: String, wordbookId: String, title: String, dueDate: Timestamp?) async throws {
+        let currentUserUID = Auth.auth().currentUser!.uid
+        let invitation = Invitation(
+            id: UUID().uuidString,
+            from: currentUserUID,
+            to: recipientUID,
+            wordbookId: wordbookId,
+            title: title,
+            timestamp: Timestamp(date: Date()),
+            dueDate: dueDate  // 제한 기한을 포함
+        )
+        
+        let data = try Firestore.Encoder().encode(invitation)
+        
+        try await Firestore.firestore().collection("invitations").document(invitation.id).setData(data)
+    }
+    
+//    // 공통 문서 가져오기 메서드
+//    private func fetchDocument(collection: String, documentID: String) async throws -> DocumentSnapshot {
+//        let document = try await db.collection(collection).document(documentID).getDocument()
+//        guard document.exists else {
+//            throw FirestoreError.documentNotFound
+//        }
+//        return document
+//    }
+    
+    enum FirestoreError: Error {
+        case documentNotFound
+    }
+    
     // 단어장 생성
     func createWordbook(wordbook: Wordbook) async throws {
         var data = try Firestore.Encoder().encode(wordbook)
@@ -185,15 +227,16 @@ final class FirestoreManager {
         data["attendees"] = wordbook.attendees
         data["words"] = [] as [String]
         data["wordCount"] = 0
-        
-        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-            db.collection("wordbooks").document(wordbook.id).setData(data) { error in
-                if let error = error {
-                    continuation.resume(throwing: error)
-                } else {
-                    continuation.resume(returning: ())
-                }
-            }
+
+        let wordbookRef = db.collection("wordbooks").document(wordbook.id)
+        try await wordbookRef.setData(data)
+
+        // 참석자들에게 단어장 공유 정보 추가
+        for attendeeId in wordbook.attendees {
+            let userRef = db.collection("users").document(attendeeId)
+            try await userRef.updateData([
+                "sharedWordbooks": FieldValue.arrayUnion([wordbook.id])
+            ])
         }
     }
     
@@ -203,11 +246,37 @@ final class FirestoreManager {
             .whereField("ownerId", isEqualTo: userId)
             .getDocuments()
         
-        return try querySnapshot.documents.compactMap { try $0.data(as: Wordbook.self) }
+        var wordbooks: [Wordbook] = []
+        
+        for document in querySnapshot.documents {
+            var wordbook = try document.data(as: Wordbook.self)
+            let wordCount = try await fetchWordCount(for: wordbook.id)
+            wordbook.wordCount = wordCount
+            wordbooks.append(wordbook)
+        }
+        
+        return wordbooks
     }
     
-    // 단어 저장
-    func addWord(to wordbookId: String, word: Word) async throws {
+    // 단어장을 업데이트하는 메서드 예시
+    func updateWordbook(_ wordbook: Wordbook) async throws {
+        var updatedWordbook = wordbook
+        updatedWordbook.wordCount = try await fetchWordCount(for: wordbook.id)
+        updatedWordbook.words = try await fetchWords(for: wordbook.id)
+        
+        let data = try Firestore.Encoder().encode(updatedWordbook)
+        
+        try await db.collection("wordbooks").document(wordbook.id).setData(data)
+    }
+
+    // 단어 추가
+    func addWord(to wordbookId: String, word: Word) async throws -> Bool {
+        // 단어 중복 확인
+        let words = try await fetchWords(for: wordbookId)
+        if words.contains(where: { $0.term == word.term }) {
+            return false // 이미 단어가 존재함
+        }
+        
         let data = try Firestore.Encoder().encode(word)
         
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
@@ -219,12 +288,30 @@ final class FirestoreManager {
                 }
             }
         }
+        
+        // 단어를 추가한 후 단어장의 wordCount를 업데이트
+        try await updateWordCount(for: wordbookId)
+        return true // 새로운 단어가 추가됨
     }
     
-    // 단어 가져오기
-    func fetchWords(from wordbookId: String) async throws -> [Word] {
-        let querySnapshot = try await fetchCollectionDocuments(collection: "wordbooks/\(wordbookId)/words")
-        return try querySnapshot.documents.compactMap { try $0.data(as: Word.self) }
+    // 단어장의 wordCount 업데이트
+    private func updateWordCount(for wordbookId: String) async throws {
+        let wordCount = try await fetchWordCount(for: wordbookId)
+        try await db.collection("wordbooks").document(wordbookId).updateData([
+            "wordCount": wordCount
+        ])
+    }
+    
+    // 단어 개수 가져오기
+    private func fetchWordCount(for wordbookId: String) async throws -> Int {
+        let snapshot = try await db.collection("wordbooks").document(wordbookId).collection("words").getDocuments()
+        return snapshot.documents.count
+    }
+    
+    // 단어들을 가져오는 메서드
+    private func fetchWords(for wordbookId: String) async throws -> [Word] {
+        let snapshot = try await db.collection("wordbooks").document(wordbookId).collection("words").getDocuments()
+        return snapshot.documents.compactMap { try? $0.data(as: Word.self) }
     }
     
     // 단어장 공개/비공개 설정
@@ -254,6 +341,77 @@ final class FirestoreManager {
             }
         }
     }
+    
+    // 공유 단어장 가져오기
+    func fetchSharedWordbooks(for userId: String) async throws -> [Wordbook] {
+        let userDoc = try await db.collection("users").document(userId).getDocument()
+        guard let sharedWordbookIds = userDoc.data()?["sharedWordbooks"] as? [String] else {
+            return []
+        }
+        
+        var wordbooks: [Wordbook] = []
+        
+        try await withThrowingTaskGroup(of: Wordbook?.self) { group in
+            for id in sharedWordbookIds {
+                group.addTask {
+                    let doc = try await self.db.collection("wordbooks").document(id).getDocument()
+                    return try doc.data(as: Wordbook.self)
+                }
+            }
+            
+            for try await wordbook in group {
+                if let wordbook = wordbook {
+                    wordbooks.append(wordbook)
+                }
+            }
+        }
+        
+        return wordbooks
+    }
+    
+    // 단어장 삭제
+    func deleteWordbook(withId wordbookId: String) async throws {
+        let wordbookRef = db.collection("wordbooks").document(wordbookId)
+        try await wordbookRef.delete()
+    }
+    
+    // MARK: 초대 관련
+
+    // 초대 전송
+    func sendInvitation(to recipientUID: String, wordbookId: String, title: String) async throws {
+        let currentUserUID = Auth.auth().currentUser!.uid
+        let invitationData: [String: Any] = [
+            "from": currentUserUID,
+            "to": recipientUID,
+            "wordbookId": wordbookId,
+            "title": title,
+            "timestamp": FieldValue.serverTimestamp()
+        ]
+        
+        try await db.collection("invitations").addDocument(data: invitationData)
+    }
+
+    // 초대 수락
+    func acceptInvitation(invitation: Invitation) async throws {
+        let userRef = db.collection("users").document(invitation.to)
+        try await userRef.updateData([
+            "sharedWordbooks": FieldValue.arrayUnion([invitation.wordbookId])
+        ])
+        
+        let invitationRef = db.collection("invitations").document(invitation.id)
+        try await invitationRef.delete()
+    }
+
+    // 초대 거절
+    func declineInvitation(invitation: Invitation) async throws {
+        let invitationRef = db.collection("invitations").document(invitation.id)
+        try await invitationRef.delete()
+    }
+    
+    // 초대 가져오기
+//    func fetchInvitations(for userId: String) async throws -> [Invitation] {
+//        let snapshot = try await db.collection("invitations").whereField("to", isEqualTo: userId).getDocuments()
+//    }
     
     // MARK: - Helper Methods
     
