@@ -47,15 +47,12 @@ class MyPageVC: UIViewController {
     
     var wordbookList = [(Wordbook, User)]()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "bgColor")
         navigationController?.setNavigationBarHidden(true, animated: false)
-        
         setupViews()
         collectionSetup()
-        
         addWordBookButton.addTarget(self, action: #selector(addWordBookButtonTapped), for: .touchUpInside)
     }
     
@@ -145,15 +142,13 @@ extension MyPageVC: UICollectionViewDelegate, UICollectionViewDataSource {
         
         let (wordbook, user) = wordbookList[indexPath.row]
         cell.configure(with: wordbook, user: user)
-        print("단어 확인: \(wordbook)")
-        
+
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let myPageWordVC = MyPageWordViewController()
         myPageWordVC.bookID = wordbookList[indexPath.row].0.id
-        print(wordbookList[indexPath.row].0)
         present(myPageWordVC, animated: true, completion: nil)
     }
 }

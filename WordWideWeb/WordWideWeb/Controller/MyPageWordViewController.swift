@@ -19,7 +19,6 @@ class MyPageWordViewController: UIViewController, UIViewControllerTransitioningD
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 10
         layout.minimumInteritemSpacing = 30
-        
         return layout
     }()
     
@@ -31,7 +30,6 @@ class MyPageWordViewController: UIViewController, UIViewControllerTransitioningD
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.allowsMultipleSelection = false
-        
         return collectionView
     }()
     
@@ -39,7 +37,6 @@ class MyPageWordViewController: UIViewController, UIViewControllerTransitioningD
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "bgColor")
-        
         setCollectionView()
     }
     
@@ -63,7 +60,7 @@ class MyPageWordViewController: UIViewController, UIViewControllerTransitioningD
     
     private func setCollectionView() {
         wordsCollecView.register(BlockCell.self, forCellWithReuseIdentifier: "BlockCell")
-        
+
         self.view.addSubview(wordsCollecView)
         wordsCollecView.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(100)
@@ -71,9 +68,7 @@ class MyPageWordViewController: UIViewController, UIViewControllerTransitioningD
             make.bottom.equalToSuperview()
         }
     }
-    
 }
-
 
 extension MyPageWordViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -82,7 +77,6 @@ extension MyPageWordViewController: UICollectionViewDataSource, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BlockCell", for: indexPath) as! BlockCell
-        
         let text = wordsList[indexPath.item].term
         cell.bind(text: text)   // 내가 클릭한 단어장의 단어 불러와야
         cell.term.font = UIFont.pretendard(size: 14, weight: .semibold)
@@ -109,7 +103,6 @@ extension MyPageWordViewController: UICollectionViewDataSource, UICollectionView
         let text = wordsList[indexPath.item].term
     
         myPageModalVC.term = text
-        print("received text: ", myPageModalVC.term)
         myPageModalVC.modalPresentationStyle = .formSheet
         if let sheet = myPageModalVC.sheetPresentationController {
             sheet.detents = [.medium()]
@@ -119,7 +112,6 @@ extension MyPageWordViewController: UICollectionViewDataSource, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? BlockCell else { return }
-        
         cell.backgroundColor = .white
         cell.term.textColor = .black
     }

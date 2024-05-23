@@ -26,12 +26,9 @@ class TestIntroViewController: UIViewController {
         attendees: ["user6", "user7"],
         sharedWith: ["user8"],
         colorCover: "red",
-        wordCount: 4,
+        wordCount: 1,
         words: [
-            Word(id: "w3", term: "Closure", definition: "A self-contained block of functionality that can be passed around and used in your code."),
-            Word(id: "w4", term: "Protocol", definition: "A blueprint of methods, properties, and other requirements that suit a particular task or piece of functionality."),
-            Word(id: "w5", term: "Algorithm", definition: "A process or set of rules to be followed in calculations or other problem-solving operations."),
-            Word(id: "w6", term: "Data Structure", definition: "A particular way of organizing and storing data in a computer so that it can be accessed and modified efficiently.")
+            Word(id: "w3", term: "Closure", definition: "A self-contained block of functionality that can be passed around and used in your code.")
         ], maxAttendees: 10
     )
     
@@ -39,7 +36,6 @@ class TestIntroViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view = self.testView
-        
         setData()
         getWords()
     }

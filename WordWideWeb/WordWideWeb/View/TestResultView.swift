@@ -268,6 +268,4 @@ class TestResultView: UIView {
         rightNumLabel.text = String(rightNum)
         wrongNumLabel.text = String(wrongNum)
     }
-    
-    
 }

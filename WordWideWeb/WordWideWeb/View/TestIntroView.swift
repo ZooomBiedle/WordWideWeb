@@ -202,7 +202,7 @@ class TestIntroView: UIView {
             let timeString = dateFormatter.string(from: specificDate)
             self.timeNumLabel.text = timeString
         } else {
-            print("날짜를 생성할 수 없습니다.")
+            print("날짜를 생성할 수 없다.")
         }
     }
 }

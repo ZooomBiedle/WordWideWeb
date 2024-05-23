@@ -13,9 +13,7 @@ class TestResultViewController: UIViewController {
     // MARK: - properties
     private let testView = TestResultView()
     var testResultWordbookId: String = ""
-    
     var block: [[String:String]] = []
-    
     var result: [Status] = []
     var wrongwordList: [String] = []
     
@@ -48,7 +46,7 @@ class TestResultViewController: UIViewController {
         self.view.setNeedsDisplay()
     }
     
-    func setData(){
+    private func setData(){
         testView.wrongwordLabel.dataSource = self
         testView.wrongwordLabel.delegate = self
         testView.wrongwordLabel.register(BlockCell.self, forCellWithReuseIdentifier: "BlockCell")
@@ -79,7 +77,7 @@ class TestResultViewController: UIViewController {
         calculateScore()
     }
     
-    func calculateScore(){
+    private func calculateScore(){
         quizCount = result.count
         testView.quizNumLabel.text = String(result.count)
         for res in result{
@@ -94,7 +92,7 @@ class TestResultViewController: UIViewController {
         }
     }
     
-    func makeWrongWordsList(){
+    private func makeWrongWordsList(){
         var index = 0
         for res in result {
             print("res \(res)")
@@ -108,7 +106,7 @@ class TestResultViewController: UIViewController {
         }
     }
     
-    func updateUserBlockCount(){
+    private func updateUserBlockCount(){
         guard let user = Auth.auth().currentUser else {
             print("No authenticated user found.")
             return
@@ -118,7 +116,7 @@ class TestResultViewController: UIViewController {
                 let userInfo = try await FirestoreManager.shared.fetchUser(uid: user.uid)
                 let blockNum = userInfo?.blockCount
                 if let blocknum = blockNum {
-                    var updateCount = blocknum + rightCount
+                    let updateCount = blocknum + rightCount
                     try await FirestoreManager.shared.updateWordCount(for: user.uid, blockCount: updateCount)
                 }
             } catch {

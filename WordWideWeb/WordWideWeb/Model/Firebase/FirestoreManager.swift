@@ -209,16 +209,7 @@ final class FirestoreManager {
                 throw error
             }
     }
-    
-    //    // 공통 문서 가져오기 메서드
-    //    private func fetchDocument(collection: String, documentID: String) async throws -> DocumentSnapshot {
-    //        let document = try await db.collection(collection).document(documentID).getDocument()
-    //        guard document.exists else {
-    //            throw FirestoreError.documentNotFound
-    //        }
-    //        return document
-    //    }
-    
+
     enum FirestoreError: Error {
         case documentNotFound
     }
@@ -263,6 +254,7 @@ final class FirestoreManager {
         return wordbooks
     }
     
+    // 모든 단어장 가져오기
     func fetchAllWordbooks() async throws -> [Wordbook] {
         let querySnapshot = try await db.collection("wordbooks")
             .whereField("isPublic", isEqualTo: true)
@@ -281,7 +273,6 @@ final class FirestoreManager {
                 print("failed")
             }
         }
-        print("wordbooks == \(wordbooks)")
         return wordbooks
     }
     
@@ -310,7 +301,6 @@ final class FirestoreManager {
             wordbook.wordCount = wordCount
             wordbooks.append(wordbook)
         }
-        print("wordbooks == \(wordbooks)")
         return wordbooks
     }
     
@@ -516,20 +506,6 @@ final class FirestoreManager {
         try await Firestore.firestore().collection("invitations").document(invitation.id).setData(data)
     }
 
-    // 초대 전송
-//    func sendInvitation(to recipientUID: String, wordbookId: String, title: String) async throws {
-//        let currentUserUID = Auth.auth().currentUser!.uid
-//        let invitationData: [String: Any] = [
-//            "from": currentUserUID,
-//            "to": recipientUID,
-//            "wordbookId": wordbookId,
-//            "title": title,
-//            "timestamp": FieldValue.serverTimestamp()
-//        ]
-//
-//        try await db.collection("invitations").addDocument(data: invitationData)
-//    }
-
     // 초대 수락
     func acceptInvitation(invitation: Invitation) async throws {
         let userRef = db.collection("users").document(invitation.to)
@@ -551,12 +527,7 @@ final class FirestoreManager {
             "attendees": FieldValue.arrayRemove([invitation.to])
         ])
     }
-    
-    // 초대 가져오기
-    //    func fetchInvitations(for userId: String) async throws -> [Invitation] {
-    //        let snapshot = try await db.collection("invitations").whereField("to", isEqualTo: userId).getDocuments()
-    //    }
-    
+
     // MARK: - Helper Methods
     
     private func fetchDocument(collection: String, documentID: String) async throws -> DocumentSnapshot {

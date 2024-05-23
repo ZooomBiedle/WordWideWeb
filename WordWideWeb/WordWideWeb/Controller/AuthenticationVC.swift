@@ -49,7 +49,6 @@ class AuthenticationVC: UIViewController {
         button.backgroundColor = .black
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 10
-        //        button.titleLabel?.font = UIFont.pretendard(size: 14, weight: .bold)
         return button
     }()
     
@@ -95,7 +94,6 @@ class AuthenticationVC: UIViewController {
         view.backgroundColor = UIColor(named: "bgColor")
         setupViews()
         setupNotificationObservers()
-        
         
         // 앱 시작 시 로그인 상태 확인
         if UserDefaults.standard.isLoggedIn && UserDefaults.standard.isAutoLoginEnabled {

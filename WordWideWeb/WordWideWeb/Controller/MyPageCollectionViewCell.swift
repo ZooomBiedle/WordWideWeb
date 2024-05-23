@@ -33,15 +33,6 @@ class MyPageCollectionViewCell: UICollectionViewCell {
         return stackView
     }()
     
-//    lazy var wordLabel: UILabel = {
-//        let label = UILabel()
-//        label.text = "let"
-//        label.textAlignment = .center
-//        label.layer.cornerRadius = 15
-//        label.backgroundColor = UIColor(named: "bgColor")
-//        return label
-//    }()
-    
     lazy var wordButton: UIButton = {
         let button = UIButton()
         button.setTitle("word", for: .normal)
@@ -50,7 +41,6 @@ class MyPageCollectionViewCell: UICollectionViewCell {
         button.setTitleColor(.black, for: .normal)
         button.layer.shadowOpacity = 0.3
         button.layer.shadowOffset = CGSize(width: 4, height: 4)
-       // button.addTarget(self, action: #selector(modalPageTapped), for: .touchUpInside)
         return button
     }()
     
@@ -103,12 +93,6 @@ class MyPageCollectionViewCell: UICollectionViewCell {
             make.height.equalTo(vStackView.snp.height).multipliedBy(0.4)
         }
         
-//        self.addSubview(wordButton)
-//        wordButton.snp.makeConstraints { make in
-//            make.top.equalToSuperview().offset(30)
-//            make.leading.equalToSuperview().offset(20)
-//        }
-        
         self.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(290)
@@ -125,7 +109,6 @@ class MyPageCollectionViewCell: UICollectionViewCell {
         self.addSubview(nameLabel)
         nameLabel.snp.makeConstraints { make in
             make.centerY.equalTo(profileImage.snp.centerY)
-            //make.top.equalToSuperview().offset(335)
             make.leading.equalToSuperview().offset(55)
         }
     }

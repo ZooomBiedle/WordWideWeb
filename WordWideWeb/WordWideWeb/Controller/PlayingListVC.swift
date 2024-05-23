@@ -16,7 +16,6 @@ class PlayingListVC: UIViewController {
     private var searchWord: String = ""
     private var wordTerms: [Word] = []
     private let pushNotificationHelper = PushNotificationHelper.shared
-    
     var wordBooks: [Wordbook] = [ ]
     
     // MARK: - lifecycle
@@ -43,7 +42,6 @@ class PlayingListVC: UIViewController {
         playlistView.resultView.dataSource = self
         playlistView.resultView.delegate = self
         playlistView.resultView.register(PlayingListViewCell.self, forCellReuseIdentifier: "PlayingListViewCell")
- 
     }
     
     private func filterData(){
@@ -91,14 +89,12 @@ class PlayingListVC: UIViewController {
     private func setBtn(){
         let popUpButtonClosure = { [self] (action: UIAction) in
             if action.title == "생성순" {
-                print("생성순")
                 wordBooks.sort { book1, book2 in
                     let date1 = convertTimestampToString(timestamp: book1.createdAt)
                     let date2 = convertTimestampToString(timestamp: book2.createdAt)
                     return date1 < date2
                 }
             } else {
-                print("마감순")
                 wordBooks.sort { book1, book2 in
                     let date1 = convertTimestampToString(timestamp: book1.dueDate)
                     let date2 = convertTimestampToString(timestamp: book2.dueDate)
@@ -129,7 +125,6 @@ class PlayingListVC: UIViewController {
         let date = timestamp.dateValue() // Timestamp를 Date로 변환
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy.MM.dd h:mm a" // 날짜 형식 설정
-        
         return dateFormatter.string(from: date) // Date를 문자열로 변환하여 반환
     }
     
@@ -144,7 +139,6 @@ class PlayingListVC: UIViewController {
         let title = wordBooks[indexPath.row].title
         guard let dueDateComponents = convertToDateComponents(from: dueDate) else { return  }
         pushNotificationHelper.pushNotification(test: title, time: dueDateComponents, identifier: "\(wordbookId)")
-  
         joinWordBook(for: wordbookId)
     }
     
@@ -153,7 +147,6 @@ class PlayingListVC: UIViewController {
             print("No authenticated user found.")
             return
         }
-
         Task {
             do {
                 let isAdded = try await FirestoreManager.shared.addAttendee(to: wordbookId, attendee: user.uid)
@@ -170,11 +163,9 @@ class PlayingListVC: UIViewController {
     
     private func convertToDateComponents(from timestamp: Timestamp?) -> DateComponents? {
         guard let timestamp = timestamp else { return nil }
-        
         let date = Date(timeIntervalSince1970: TimeInterval(timestamp.seconds))
         let calendar = Calendar.current
         let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
-        
         return components
     }
     
@@ -193,25 +184,20 @@ class PlayingListVC: UIViewController {
             setDataForSearchWord(keyword: searchWord)
         }
     }
-    
 }
 
 extension PlayingListVC: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print("사용자가 입력한 텍스트: \(searchText)")
         searchWord = searchText
         if searchWord == "" {
             setDataForTrending()
         } else {
             setDataForSearchWord(keyword: searchWord)
         }
-        
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        print("사용자가 엔터 키를 눌렀습니다.")
         searchBar.resignFirstResponder()
-        
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -224,14 +210,12 @@ extension PlayingListVC: UISearchBarDelegate {
             return words
         } catch {
             print("Error fetching words: \(error.localizedDescription)")
-            throw error // 에러를 다시 던져서 호출자에게 전달
+            throw error
         }
     }
 }
 
 extension PlayingListVC: UITableViewDelegate, UITableViewDataSource {
-    
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return wordBooks.count
     }
@@ -240,7 +224,6 @@ extension PlayingListVC: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "PlayingListViewCell", for: indexPath) as? PlayingListViewCell else {
             return UITableViewCell()
         }
-        
         let title = wordBooks[indexPath.row].title
         let date = convertTimestampToString(timestamp: wordBooks[indexPath.row].dueDate)
         let owner =  wordBooks[indexPath.row].ownerId
@@ -267,7 +250,6 @@ extension PlayingListVC: UITableViewDelegate, UITableViewDataSource {
                 print("Error fetching words: \(error.localizedDescription)")
             }
         }
-        
         return cell
     }
 
@@ -278,7 +260,6 @@ extension PlayingListVC: UITableViewDelegate, UITableViewDataSource {
             do {
                 if let url = try await fetchImage(id: id) {
                     imageView.sd_setImage(with: URL(string: url), placeholderImage: UIImage(systemName: "person.crop.circle"))
-                    
                 } else {
                     imageView.image = UIImage(systemName: "person.crop.circle")
                 }
@@ -316,7 +297,6 @@ extension PlayingListVC: UITableViewDelegate, UITableViewDataSource {
             return 80
         }
     }
-    
 }
 
 

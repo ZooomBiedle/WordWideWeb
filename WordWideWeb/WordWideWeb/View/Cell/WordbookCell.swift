@@ -14,7 +14,6 @@ class WordbookCell: UICollectionViewCell {
     private let wordCountLabel = UILabel()
     private let trashButton = UIButton(type: .system)
     
-    
     var onDelete: (() -> Void)?
     
     // Initializer
@@ -57,7 +56,6 @@ class WordbookCell: UICollectionViewCell {
             make.top.equalTo(titleLabel.snp.bottom).offset(16)
             make.leading.equalTo(contentView).offset(16)
             make.bottom.equalTo(contentView).offset(-16)
-//            make.trailing.equalTo(contentView).offset(-8)
         }
         
         trashButton.snp.makeConstraints { make in
@@ -84,7 +82,6 @@ class WordbookCell: UICollectionViewCell {
         titleLabel.text = wordbook.title
         wordCountLabel.text = "\(wordbook.wordCount)"
         contentView.backgroundColor = UIColor(hex: wordbook.colorCover)
-        
         trashButton.isHidden = wordbook.isPublic
     }
 }

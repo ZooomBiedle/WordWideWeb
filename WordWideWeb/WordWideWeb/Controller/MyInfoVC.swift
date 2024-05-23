@@ -428,7 +428,6 @@ extension MyInfoVC: UICollectionViewDelegate, UICollectionViewDataSource, UIColl
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let myPageWordVC = MyPageWordViewController()
         myPageWordVC.bookID = wordbooks[indexPath.item].id
-        print("단어장ID: ", wordbooks[indexPath.item].id )
         present(myPageWordVC, animated: true, completion: nil)
     }
 }

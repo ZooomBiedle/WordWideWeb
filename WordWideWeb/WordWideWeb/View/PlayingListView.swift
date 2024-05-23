@@ -64,8 +64,7 @@ class PlayingListView: UIView{
         searchBar.layer.borderColor = UIColor.clear.cgColor
         searchBar.layer.backgroundColor = UIColor.white.cgColor
     }
-    
-    
+
     private func setUI(){
         customComponent()
         self.backgroundColor = .bg
@@ -104,7 +103,5 @@ class PlayingListView: UIView{
             make.top.equalTo(searchBar.snp.bottom).offset(30)
             make.leading.trailing.bottom.equalToSuperview()
         }
-        
     }
-    
 }

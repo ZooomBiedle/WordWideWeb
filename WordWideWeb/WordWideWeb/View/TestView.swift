@@ -12,7 +12,6 @@ import UIKit
 class TestView: UIView {
     
     // MARK: - properties
-    
     private let topView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
@@ -82,7 +81,6 @@ class TestView: UIView {
     lazy var currentPageLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.pretendard(size: 17, weight: .regular)
-//        label.text = "1"
         label.textAlignment = .left
         label.textColor = .black
         label.numberOfLines = 1
@@ -116,7 +114,6 @@ class TestView: UIView {
         return label
     }()
     
-    
     private let quizLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.pretendard(size: 18, weight: .regular)
@@ -125,7 +122,6 @@ class TestView: UIView {
         label.numberOfLines = 5
         return label
     }()
-    
     
     private lazy var answerStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [answerLabel, submitBtn])
@@ -161,9 +157,7 @@ class TestView: UIView {
         button.setTitle("Submit", for: .normal)
         return button
     }()
-    
-    
-    
+
     // MARK: - methods
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -201,7 +195,6 @@ class TestView: UIView {
         currentPageLabel.text = String(page)
         quizLabel.text = definition
     }
-    
 
     private func setUI(){
         self.backgroundColor = .bg
@@ -288,7 +281,5 @@ class TestView: UIView {
             make.centerY.equalTo(questionView.snp.centerY)
             make.trailing.equalTo(questionView.snp.leading).offset(-5)
         }
-        
     }
-    
 }

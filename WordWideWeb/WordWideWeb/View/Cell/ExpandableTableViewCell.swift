@@ -45,11 +45,9 @@ class ExpandableTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.pretendard(size: 14, weight: .regular)
         label.numberOfLines = 2
-//        label.textAlignment = .right
         return label
     }()
-    
-//    var profileImageView = UIImageView()
+
     var rejectButtonAction: (() -> Void)?
     var acceptButtonAction: (() -> Void)?
     
@@ -59,7 +57,6 @@ class ExpandableTableViewCell: UITableViewCell {
         }
     }
     
-
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -208,7 +205,6 @@ extension ExpandableTableViewCell: UICollectionViewDataSource, UICollectionViewD
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BlockCell.identifier, for: indexPath) as! BlockCell
         cell.bind(text: words[indexPath.row])
-        
         cell.backgroundColor = .red
         return cell
     }

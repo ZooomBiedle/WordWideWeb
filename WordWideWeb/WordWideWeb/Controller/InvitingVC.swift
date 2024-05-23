@@ -26,7 +26,6 @@ class InvitingVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configureUI()
         setConstraints()
     }
@@ -80,7 +79,6 @@ class InvitingVC: UIViewController {
                     let dueDate = invitation.dueDate
                     let id = invitation.wordbookId
                     let title = invitation.title
-                    print("")
                     guard let dueDateComponents = convertToDateComponents(from: dueDate) else { return  }
                     pushNotificationHelper.pushNotification(test: title, time: dueDateComponents, identifier: "\(id)")
                     
@@ -93,11 +91,10 @@ class InvitingVC: UIViewController {
     
     private func convertToDateComponents(from dueDate: String) -> DateComponents? {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z" // 시간대 정보를 포함한 형식으로 설정
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX") // 날짜 형식이 항상 동일하게 파싱되도록 설정
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         dateFormatter.timeZone = TimeZone(identifier: "Asia/Seoul") // 한국 시간대로 설정
         
-        // 문자열을 Date로 변환
         guard let date = dateFormatter.date(from: dueDate) else {
             print("Invalid date format")
             return nil
@@ -105,7 +102,7 @@ class InvitingVC: UIViewController {
         
         // Date를 DateComponents로 변환
         var calendar = Calendar.current
-        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")! // 한국 시간대로 설정
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
         let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
         
         return components

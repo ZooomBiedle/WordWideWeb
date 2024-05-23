@@ -60,7 +60,7 @@ class PlayingListViewCell: UITableViewCell {
         return btn
     }()
     
-    
+    // MARK: - lifecycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setUI()
@@ -72,6 +72,7 @@ class PlayingListViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - method
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         if selected {
@@ -83,7 +84,6 @@ class PlayingListViewCell: UITableViewCell {
     }
     
     private func updatePplLabel() {
-        print("updatePplLabel \(nowPplNum) / \(pplNum)")
         pplLabel.text = "\(nowPplNum) / \(pplNum)"
     }
     
@@ -139,7 +139,6 @@ class PlayingListViewCell: UITableViewCell {
         
         self.contentView.addSubview(pplImageView)
         pplImageView.snp.makeConstraints { make in
-            //make.top.equalToSuperview().offset(40)
             make.centerY.equalTo(joinButton.snp.centerY)
             make.height.width.equalTo(25)
             make.leading.equalToSuperview().offset(60)
@@ -147,7 +146,6 @@ class PlayingListViewCell: UITableViewCell {
         
         self.contentView.addSubview(pplLabel)
         pplLabel.snp.makeConstraints { make in
-            //make.top.equalTo(wordView.snp.bottom).offset(10)
             make.centerY.equalTo(joinButton.snp.centerY)
             make.leading.equalTo(pplImageView.snp.trailing).offset(10)
         }
@@ -161,6 +159,7 @@ class PlayingListViewCell: UITableViewCell {
     }
     
 }
+// MARK: - extension
 extension PlayingListViewCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         var words = Array(wordList.prefix(cellCount)).joined(separator: " ")

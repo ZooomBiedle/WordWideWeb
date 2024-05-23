@@ -52,10 +52,9 @@ class TestViewController: UIViewController {
         testView.beforeBtn.addTarget(self, action: #selector(beforeBtnTapped), for: .touchUpInside)
         testView.submitBtn.addTarget(self, action: #selector(checkAnswer), for: .touchUpInside)
         testView.beforeBtn.isEnabled = false
-        
+
         status = Array(repeating: .none, count: block.count)
         
-        print("currentIndex\(currentIndex)")
         setTimer()
         reloadQView()
     }
@@ -75,7 +74,6 @@ class TestViewController: UIViewController {
             if self.secondLeft > 0 {
                 self.testView.timeLabel.text = String(format: "%02d:%02d", minutes, seconds)
             } else {
-                //self.testView.timeLabel.text = "시간 끝!"
                 self.timer?.invalidate()
                 self.moveToResultView()
             }
@@ -83,7 +81,6 @@ class TestViewController: UIViewController {
     }
     
     private func reloadQView(){
-        print("currentIndex\(currentIndex)")
         if let def = block[currentIndex]["definition"] {
             testView.bindQ(page: currentIndex+1, definition: def)
         }
@@ -109,15 +106,11 @@ class TestViewController: UIViewController {
     private func moveToResultView(){
         bind()
         resultVC.modalPresentationStyle = .fullScreen
-        //self.present(resultVC, animated: true)
         
         if self.presentedViewController == nil {
-            // TestResultViewController 표시
             self.present(resultVC, animated: true, completion: nil)
         } else if self.presentedViewController != resultVC {
-            // 현재 표시된 뷰 컨트롤러 해제 (선택 사항)
             self.dismiss(animated: true) {
-                // TestResultViewController 표시
                 self.present(self.resultVC, animated: true, completion: nil)
             }
         }
@@ -153,11 +146,9 @@ class TestViewController: UIViewController {
         }
         if answer == userInput {
             status[currentIndex] = .right
-            print("right!")
             reloadQView()
         } else {
             status[currentIndex] = .wrong
-            print("wrong")
             reloadQView()
         }
         print(status)
@@ -207,7 +198,6 @@ extension TestViewController: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TestFriendViewCell", for: indexPath) as! TestFriendViewCell
-        //cell.attendeesId = taskmem[indexPath.row]
         fetchImageAndSetImage(for: taskmem[indexPath.row], imageView: cell.friendImage)
         return cell
     }

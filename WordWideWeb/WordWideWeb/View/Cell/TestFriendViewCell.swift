@@ -20,6 +20,7 @@ class TestFriendViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError()
     }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUI()
@@ -36,11 +37,10 @@ class TestFriendViewCell: UICollectionViewCell {
         }
     }
     
-    func bind(imageData: Data?){
+    private func bind(imageData: Data?){
         if let image = imageData {
             friendImage.image = UIImage(data: image)
         }
-
     }
 }
 

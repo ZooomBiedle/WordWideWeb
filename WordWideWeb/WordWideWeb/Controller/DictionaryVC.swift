@@ -109,10 +109,8 @@ extension DictionaryVC: UISearchBarDelegate {
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         guard let keyword = searchBar.text else { return }
-        print("Search query: \(keyword)")
         NetworkManager.shared.fetchAPI(query: keyword) { [weak self] items in
             guard let self else { return }
-            print("Items received: \(items.count)")
             self.receivedItem = items
         }
     }
@@ -143,12 +141,7 @@ extension DictionaryVC: UITableViewDataSource {
     
     private func presentWordbookActionSheet(for item: Item) {
         let alert = UIAlertController(title: "Select Wordbook", message: nil, preferredStyle: .actionSheet)
-//        alert.view.backgroundColor = .red
-//        alert.isSpringLoaded = true
-//        alert.severity = .critical
-//        alert.viewIfLoaded?.backgroundColor = .red
-        
-        
+
         wordbooks.forEach { wordbook in
             let action = UIAlertAction(title: wordbook.title, style: .default) { [weak self] _ in
                 self?.addWord(item, to: wordbook)

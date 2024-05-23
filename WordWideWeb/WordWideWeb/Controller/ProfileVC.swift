@@ -23,8 +23,6 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 50
         imageView.clipsToBounds = true
-//        imageView.layer.borderWidth = 2
-//        imageView.layer.borderColor = UIColor.white.cgColor
         return imageView
     }()
     
