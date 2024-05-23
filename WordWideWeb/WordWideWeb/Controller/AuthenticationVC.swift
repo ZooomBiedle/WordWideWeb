@@ -11,10 +11,12 @@ import GoogleSignIn
 import GoogleSignInSwift
 import FirebaseAuth
 import AuthenticationServices
+import SwiftUI
 
 class AuthenticationVC: UIViewController {
     
     // 이미지 추가해야함 애니메이션? 회의로 결정하기
+    private let circleAnimateTextController = UIHostingController(rootView: CircleAnimateText())
     
     private let welcomeLabel: UILabel = {
         let label = UILabel()
@@ -102,6 +104,10 @@ class AuthenticationVC: UIViewController {
     }
     
     private func setupViews() {
+        addChild(circleAnimateTextController)
+        view.addSubview(circleAnimateTextController.view)
+        circleAnimateTextController.didMove(toParent: self)
+        
         view.addSubview(welcomeLabel)
         view.addSubview(signInDescriptionLabel)
         view.addSubview(signInButton)
@@ -110,6 +116,12 @@ class AuthenticationVC: UIViewController {
         view.addSubview(googleSignInButton)
         view.addSubview(appleSignInButton)
         view.addSubview(termsLabel)
+        
+        circleAnimateTextController.view.snp.makeConstraints { make in
+            make.top.equalTo(view)
+            make.left.right.equalTo(view)
+            make.height.equalTo(400) // 필요한 경우 높이 조정
+        }
         
         welcomeLabel.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(320)

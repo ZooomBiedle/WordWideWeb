@@ -176,6 +176,7 @@ extension InvitingVC: UITableViewDataSource, UITableViewDelegate {
                         DispatchQueue.main.async {
                             self?.invitationList.remove(at: indexPath.row)
                             self?.tableview.deleteRows(at: [indexPath], with: .automatic)
+                            NotificationCenter.default.post(name: .init("invitationAccepted"), object: nil)
                         }
                     } catch {
                         print("Error accepting invitation: \(error)")

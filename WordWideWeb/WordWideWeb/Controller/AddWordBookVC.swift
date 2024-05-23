@@ -411,9 +411,7 @@ class AddWordBookVC: UIViewController, UITextFieldDelegate, UICollectionViewDele
         guard let title = titleTextField.text,
               let coverColor = selectedCoverColor,
               timePeriodYesButton.isSelected || timePeriodNoButton.isSelected,
-              publicButton.isSelected || privateButton.isSelected else {
-            return
-        }
+              publicButton.isSelected || privateButton.isSelected else { return }
         
         let isPublic = publicButton.isSelected
         let dueDate: Timestamp? = timePeriodYesButton.isSelected ? Timestamp(date: deadlineDatePicker.date) : nil
@@ -441,13 +439,19 @@ class AddWordBookVC: UIViewController, UITextFieldDelegate, UICollectionViewDele
         
         activityIndicator.startAnimating()
         
-        guard let dueDateComponents = convertToDateComponents(from: dueDate) else { return  }
-        pushNotificationHelper.pushNotification(test: title, time: dueDateComponents, identifier: "\(id)")
+        if let dueDate = dueDate {
+            if let dueDateComponents = convertToDateComponents(from: dueDate) {
+                pushNotificationHelper.pushNotification(test: title, time: dueDateComponents, identifier: "\(id)")
+            } else {
+                print("Failed to convert due date")
+                activityIndicator.stopAnimating()
+                return
+            }
+        }
         
         Task {
             do {
                 try await FirestoreManager.shared.createWordbook(wordbook: wordbook)
-                print("Wordbook created successfully")
                 
                 // 초대장 전송
                 for friend in invitedFriends {
@@ -459,12 +463,11 @@ class AddWordBookVC: UIViewController, UITextFieldDelegate, UICollectionViewDele
                     )
                 }
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                DispatchQueue.main.async {
                     self.activityIndicator.stopAnimating()
                     self.dismiss(animated: true, completion: nil)
                 }
             } catch {
-                print("Error creating wordbook: \(error.localizedDescription)")
                 DispatchQueue.main.async {
                     self.activityIndicator.stopAnimating()
                 }
@@ -473,9 +476,12 @@ class AddWordBookVC: UIViewController, UITextFieldDelegate, UICollectionViewDele
     }
     
     private func convertToDateComponents(from timestamp: Timestamp?) -> DateComponents? {
-        guard let timestamp = timestamp else { return nil }
+        guard let timestamp = timestamp else {
+            print("Timestamp is nil")
+            return nil
+        }
         
-        let date = Date(timeIntervalSince1970: TimeInterval(timestamp.seconds))
+        let date = timestamp.dateValue()
         let calendar = Calendar.current
         let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
         
@@ -507,5 +513,3 @@ private extension UITextField {
         self.leftViewMode = .always
     }
 }
-
-

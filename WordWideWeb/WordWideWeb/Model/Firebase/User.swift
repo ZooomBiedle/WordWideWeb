@@ -71,47 +71,62 @@ extension UserDefaults {
         static let appleNonce = "appleNonce"
         static let appleEmail = "appleEmail"
         static let appleDisplayName = "appleDisplayName"
+        static let cachedWordbooks = "cachedWordbooks"
     }
     
     var isLoggedIn: Bool {
         get { return bool(forKey: Keys.isLoggedIn) }
-        set { set(newValue, forKey: Keys.isLoggedIn) }
+        set { set(newValue, forKey: Keys.isLoggedIn); synchronize() }
     }
     
     var isAutoLoginEnabled: Bool {
         get { return bool(forKey: Keys.isAutoLoginEnabled) }
-        set { set(newValue, forKey: Keys.isAutoLoginEnabled) }
+        set { set(newValue, forKey: Keys.isAutoLoginEnabled); synchronize() }
     }
     
     var googleIDToken: String? {
         get { return string(forKey: Keys.googleIDToken) }
-        set { set(newValue, forKey: Keys.googleIDToken) }
+        set { set(newValue, forKey: Keys.googleIDToken); synchronize() }
     }
     
     var googleAccessToken: String? {
         get { return string(forKey: Keys.googleAccessToken) }
-        set { set(newValue, forKey: Keys.googleAccessToken) }
+        set { set(newValue, forKey: Keys.googleAccessToken); synchronize() }
     }
     
     var appleIDToken: String? {
         get { return string(forKey: Keys.appleIDToken) }
-        set { set(newValue, forKey: Keys.appleIDToken) }
+        set { set(newValue, forKey: Keys.appleIDToken); synchronize() }
     }
     
     var appleNonce: String? {
         get { return string(forKey: Keys.appleNonce) }
-        set { set(newValue, forKey: Keys.appleNonce) }
+        set { set(newValue, forKey: Keys.appleNonce); synchronize() }
     }
     
-    var appleEmail: String? { // 추가
+    var appleEmail: String? {
         get { return string(forKey: Keys.appleEmail) }
-        set { set(newValue, forKey: Keys.appleEmail) }
+        set { set(newValue, forKey: Keys.appleEmail); synchronize() }
     }
     
-    var appleDisplayName: String? { // 추가
+    var appleDisplayName: String? {
         get { return string(forKey: Keys.appleDisplayName) }
-        set { set(newValue, forKey: Keys.appleDisplayName) }
+        set { set(newValue, forKey: Keys.appleDisplayName); synchronize() }
+    }
+    
+    var cachedWordbooks: [Wordbook] {
+        get {
+            if let data = data(forKey: Keys.cachedWordbooks),
+               let wordbooks = try? JSONDecoder().decode([Wordbook].self, from: data) {
+                return wordbooks
+            }
+            return []
+        }
+        set {
+            if let data = try? JSONEncoder().encode(newValue) {
+                set(data, forKey: Keys.cachedWordbooks)
+                synchronize()
+            }
+        }
     }
 }
-
-

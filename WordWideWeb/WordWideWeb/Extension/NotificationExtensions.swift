@@ -9,5 +9,6 @@ import Foundation
 
 extension Notification.Name {
     static let userProfileUpdated = Notification.Name("userProfileUpdated")
+    static let modalDismissed = Notification.Name("modalDismissed")
 }
 

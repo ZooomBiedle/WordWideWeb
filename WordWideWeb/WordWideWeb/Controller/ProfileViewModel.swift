@@ -14,6 +14,8 @@ class ProfileViewModel: ObservableObject {
     @Published var displayName: String = ""
     @Published var photoURL: URL?
     @Published var socialMediaLink: String? = nil
+    @Published var sharedWordbooks: [Wordbook] = []
+    @Published var currentUser: User?
     
     var user: User?
 
@@ -53,14 +55,41 @@ class ProfileViewModel: ObservableObject {
             }
         }
     }
+    
+    func fetchSharedWordbooks() {
+        guard let user = Auth.auth().currentUser else { return }
+        
+        Task {
+            do {
+                let sharedWordbooks = try await FirestoreManager.shared.fetchSharedWordbooks(for: user.uid)
+                DispatchQueue.main.async {
+                    self.sharedWordbooks = sharedWordbooks
+                }
+            } catch {
+                print("Error fetching shared wordbooks: \(error)")
+            }
+        }
+    }
 
     private func updatePublishedValues() {
         guard let user = user else { return }
-        self.displayName = user.displayName ?? ""
-        self.photoURL = URL(string: user.photoURL ?? "")
-        self.socialMediaLink = user.socialMediaLink ?? ""
+        let newDisplayName = user.displayName ?? ""
+        let newPhotoURL = URL(string: user.photoURL ?? "")
+        let newSocialMediaLink = user.socialMediaLink ?? ""
         
-        NotificationCenter.default.post(name: .userProfileUpdated, object: nil)
+        DispatchQueue.main.async {
+            self.displayName = newDisplayName
+            self.photoURL = newPhotoURL
+            self.socialMediaLink = newSocialMediaLink
+            
+            // UserDefaults 동기화 접근
+            UserDefaults.standard.set(newDisplayName, forKey: "displayName")
+            UserDefaults.standard.set(newPhotoURL?.absoluteString, forKey: "photoURL")
+            UserDefaults.standard.set(newSocialMediaLink, forKey: "socialMediaLink")
+            UserDefaults.standard.synchronize()
+            
+            NotificationCenter.default.post(name: .userProfileUpdated, object: nil)
+        }
     }
 
     func updateUserProfile(displayName: String?, photoURL: URL?, socialMediaLink: String?) async {
@@ -85,5 +114,3 @@ class ProfileViewModel: ObservableObject {
         }
     }
 }
-
-

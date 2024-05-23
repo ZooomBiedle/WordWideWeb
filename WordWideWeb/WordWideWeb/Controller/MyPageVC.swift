@@ -59,6 +59,7 @@ class MyPageVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchAndSetWordbooks() // 뷰가 나타날 때마다 단어장 불러오기
+        removeExpiredWordbooks()
     }
     
     @objc private func addWordBookButtonTapped() {
@@ -126,6 +127,26 @@ class MyPageVC: UIViewController {
             }
         }
     }
+    
+    private func removeExpiredWordbooks() {
+        let currentDate = Date()
+        Task {
+            for (index, (wordbook, _)) in wordbookList.enumerated().reversed() {
+                if let dueDate = wordbook.dueDate?.dateValue(), dueDate < currentDate {
+                    do {
+                        try await FirestoreManager.shared.deleteWordbook(withId: wordbook.id)
+                        wordbookList.remove(at: index)
+                    } catch {
+                        print("Error deleting wordbook: \(error)")
+                    }
+                }
+            }
+            DispatchQueue.main.async {
+                self.collection.reloadData()
+            }
+        }
+    }
+
 }
 
 

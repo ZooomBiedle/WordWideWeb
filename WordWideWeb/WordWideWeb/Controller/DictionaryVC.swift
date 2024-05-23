@@ -27,6 +27,7 @@ class DictionaryVC: UIViewController {
     
     // addButton 누르면 보여질 단어장 배열
     private var wordbooks: [Wordbook] = []
+    private var isFetchingWordbooks = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,15 +38,20 @@ class DictionaryVC: UIViewController {
         fetchWordbooks()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
     func configureUI() {
         self.view.backgroundColor = UIColor(named: "bgColor")
-        navigationController?.setNavigationBarHidden(true, animated: false)
         
         self.searchBar.delegate = self
         searchBar.backgroundColor = .white
         searchBar.searchTextField.backgroundColor = .white
         searchBar.layer.borderColor = UIColor.white.cgColor
         
+        self.tableview.dataSource = self
         self.tableview.dataSource = self
         tableview.register(DictionaryTableViewCell.self, forCellReuseIdentifier: DictionaryTableViewCell.identifier)
         self.tableview.backgroundColor = UIColor(named: "bgColor")
@@ -89,13 +95,20 @@ class DictionaryVC: UIViewController {
     
     // 단어장 추가 메서드
     private func fetchWordbooks() {
-        guard let userId = Auth.auth().currentUser?.uid else { return }
+        guard !isFetchingWordbooks, let userId = Auth.auth().currentUser?.uid else { return }
+        isFetchingWordbooks = true
         Task {
             do {
                 wordbooks = try await FirestoreManager.shared.fetchWordbooks(for: userId)
-                tableview.reloadData()
+                DispatchQueue.main.async {
+                    self.tableview.reloadData()
+                    self.isFetchingWordbooks = false
+                }
             } catch {
                 print("Failed to fetch wordbooks: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    self.isFetchingWordbooks = false
+                }
             }
         }
     }
@@ -110,12 +123,14 @@ extension DictionaryVC: UISearchBarDelegate {
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         guard let keyword = searchBar.text else { return }
         NetworkManager.shared.fetchAPI(query: keyword) { [weak self] items in
-            guard let self else { return }
-            self.receivedItem = items
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                print("Items received: \(items.count)")
+                self.receivedItem = items
+            }
         }
     }
 }
-
 
 extension DictionaryVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

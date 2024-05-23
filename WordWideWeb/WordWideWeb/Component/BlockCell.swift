@@ -7,43 +7,42 @@
 import UIKit
 import SnapKit
 
+import UIKit
+
 class BlockCell: UICollectionViewCell {
-    
     static let identifier = "BlockCell"
     
     let term: UILabel = {
-        let term = UILabel()
-        term.textColor = .black
-        term.font = UIFont.pretendard(size: 14, weight: .semibold)
-        term.backgroundColor = .white
-        term.textAlignment = .center
-        term.layer.cornerRadius = 4
-        term.clipsToBounds = true
-        return term
+        let label = UILabel()
+        label.font = UIFont.pretendard(size: 14, weight: .regular)
+        label.textColor = .black
+        label.backgroundColor = .white
+        label.layer.cornerRadius = 5
+        label.clipsToBounds = true
+        label.textAlignment = .center
+        label.numberOfLines = 1
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.setContentHuggingPriority(.required, for: .horizontal)
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
+        return label
     }()
-    
-    required init?(coder: NSCoder) {
-        fatalError()
-    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setUI()
+        contentView.addSubview(term)
+        contentView.layer.cornerRadius = 5
+        contentView.layer.masksToBounds = true
+        
+        term.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(8)
+        }
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        self.bind(text: "")
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     func bind(text: String) {
-        self.term.text = text
-    }
-    
-    func setUI(){
-        self.contentView.addSubview(term)
-        term.snp.makeConstraints { make in
-            make.centerX.centerY.equalToSuperview()
-        }
+        term.text = text
     }
 }

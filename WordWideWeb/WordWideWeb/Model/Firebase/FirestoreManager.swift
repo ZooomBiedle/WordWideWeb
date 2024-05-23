@@ -210,51 +210,76 @@ final class FirestoreManager {
             }
     }
 
+    func fetchSharedWordbooks(for userId: String) async throws -> [Wordbook] {
+        let querySnapshot = try await db.collection("wordbooks")
+            .whereField("attendees", arrayContains: userId)
+            .getDocuments()
+        
+        return querySnapshot.documents.compactMap { try? $0.data(as: Wordbook.self) }
+    }
+
     enum FirestoreError: Error {
         case documentNotFound
     }
     
     // 단어장 생성
     func createWordbook(wordbook: Wordbook) async throws {
-        var data = try Firestore.Encoder().encode(wordbook)
-        data["createdDate"] = FieldValue.serverTimestamp()
-        data["hasDueDate"] = wordbook.dueDate != nil
-        data["attendees"] = wordbook.attendees
-        data["words"] = [] as [String]
-        data["wordCount"] = 0
-        data["maxAttendees"] = wordbook.maxAttendees
+        do {
+            var data = try Firestore.Encoder().encode(wordbook)
+            data["createdDate"] = FieldValue.serverTimestamp()
+            data["hasDueDate"] = wordbook.dueDate != nil
+            data["attendees"] = wordbook.attendees
+            data["words"] = [] as [String]
+            data["wordCount"] = 0
+            data["maxAttendees"] = wordbook.maxAttendees
+            
+            let wordbookRef = db.collection("wordbooks").document(wordbook.id)
+            try await wordbookRef.setData(data)
+            print("Wordbook data set in Firestore")
 
-        let wordbookRef = db.collection("wordbooks").document(wordbook.id)
-        try await wordbookRef.setData(data)
-        
-        // 참석자들에게 단어장 공유 정보 추가
-        for attendeeId in wordbook.attendees {
-            let userRef = db.collection("users").document(attendeeId)
-            try await userRef.updateData([
-                "sharedWordbooks": FieldValue.arrayUnion([wordbook.id])
-            ])
+            // 참석자들에게 단어장 공유 정보 추가
+            for attendeeId in wordbook.attendees {
+                let userRef = db.collection("users").document(attendeeId)
+                try await userRef.updateData([
+                    "sharedWordbooks": FieldValue.arrayUnion([wordbook.id])
+                ])
+                print("Shared wordbook ID \(wordbook.id) added to user \(attendeeId)")
+            }
+        } catch {
+            print("Error creating wordbook: \(error.localizedDescription)")
+            throw error
         }
     }
     
-    // 단어장 가져오기
     func fetchWordbooks(for userId: String) async throws -> [Wordbook] {
         let querySnapshot = try await db.collection("wordbooks")
             .whereField("ownerId", isEqualTo: userId)
             .getDocuments()
         
         var wordbooks: [Wordbook] = []
-        
-        for document in querySnapshot.documents {
-            var wordbook = try document.data(as: Wordbook.self)
-            let wordCount = try await fetchWordCount(for: wordbook.id)
-            wordbook.wordCount = wordCount
-            wordbooks.append(wordbook)
+
+        // 동시성 관리
+        try await withThrowingTaskGroup(of: (Wordbook, Int).self) { group in
+            for document in querySnapshot.documents {
+                group.addTask {
+                    // 비동기적으로 데이터 디코딩 및 추가 정보를 가져옴
+                    let wordbook = try document.data(as: Wordbook.self)
+                    let wordCount = try await self.fetchWordCount(for: wordbook.id)
+                    return (wordbook, wordCount)
+                }
+            }
+            
+            // 결과 수집
+            for try await (wordbook, wordCount) in group {
+                var updatedWordbook = wordbook
+                updatedWordbook.wordCount = wordCount
+                wordbooks.append(updatedWordbook)
+            }
         }
-        
+
         return wordbooks
     }
-    
-    // 모든 단어장 가져오기
+
     func fetchAllWordbooks() async throws -> [Wordbook] {
         let querySnapshot = try await db.collection("wordbooks")
             .whereField("isPublic", isEqualTo: true)

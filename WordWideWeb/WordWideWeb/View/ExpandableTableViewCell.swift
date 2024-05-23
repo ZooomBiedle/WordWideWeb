@@ -85,8 +85,8 @@ class ExpandableTableViewCell: UITableViewCell {
     func setupCollectionView() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.minimumInteritemSpacing = 8
-        layout.minimumLineSpacing = 8
+        layout.minimumInteritemSpacing = 10
+        layout.minimumLineSpacing = 10
         layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         
         wordCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -94,7 +94,8 @@ class ExpandableTableViewCell: UITableViewCell {
         wordCollectionView.dataSource = self
         wordCollectionView.delegate = self
         wordCollectionView.isHidden = true
-        wordCollectionView.backgroundColor = .yellow
+        wordCollectionView.backgroundColor = .bg
+        wordCollectionView.contentInset = .init(top: 10, left: 10, bottom: 10, right: 10)
     }
     
     var words: [String] = [] {
@@ -149,7 +150,7 @@ class ExpandableTableViewCell: UITableViewCell {
     }
     
     func toggleExpansion(_ expand: Bool) {
-        let wordCollectionHeight: CGFloat = expand ? 80 : 0
+        let wordCollectionHeight: CGFloat = expand ? 100 : 0
         let buttonHeight: CGFloat = expand ? 30 : 0
         
         wordCollectionView.snp.updateConstraints { make in
@@ -187,6 +188,14 @@ class ExpandableTableViewCell: UITableViewCell {
         acceptButtonAction?()
     }
     
+    private func makeShadow(cell: UICollectionViewCell) {
+        cell.layer.masksToBounds = false
+        cell.layer.shadowColor = UIColor.black.cgColor
+        cell.layer.shadowOpacity = 0.5
+        cell.layer.shadowOffset = CGSize(width: 0, height: 2)
+        cell.layer.shadowRadius = 3
+    }
+    
     func configure(title: String, date: String, imageURL: URL?) {
         titleLabel.text = title
         dateLabel.text = date.replacingOccurrences(of: " ", with: "\n")
@@ -205,8 +214,23 @@ extension ExpandableTableViewCell: UICollectionViewDataSource, UICollectionViewD
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BlockCell.identifier, for: indexPath) as! BlockCell
         cell.bind(text: words[indexPath.row])
-        cell.backgroundColor = .red
+
+        cell.backgroundColor = .white
+        cell.layer.cornerRadius = 5
+        cell.layer.shadowColor = UIColor.black.cgColor
+        cell.layer.shadowOpacity = 0.5
+        cell.layer.shadowOffset = CGSize(width: 0, height: 2)
+        cell.layer.shadowRadius = 3
+        cell.layer.masksToBounds = false
+        
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let text = words[indexPath.row]
+        let attributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16)]
+        let estimatedSize = (text as NSString).size(withAttributes: attributes)
+        return CGSize(width: estimatedSize.width + 20, height: 28) // 패딩 포함한 셀 크기
     }
 }
 

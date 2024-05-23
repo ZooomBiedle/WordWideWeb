@@ -37,6 +37,8 @@
 		2A8447342BF36B9400AE319A /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8447332BF36B9400AE319A /* SignUpVC.swift */; };
 		2A8447362BF36BD600AE319A /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8447352BF36BD600AE319A /* AuthenticationManager.swift */; };
 		2A8447382BF3850C00AE319A /* SignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8447372BF3850C00AE319A /* SignInVC.swift */; };
+		2A8E20B12BFF8EB600239C09 /* CircleAnimateText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8E20B02BFF8EB600239C09 /* CircleAnimateText.swift */; };
+		2A8E20B32BFF913400239C09 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8E20B22BFF913400239C09 /* LaunchView.swift */; };
 		2AA413D62BF3D14100C34FEB /* SignInGoogleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA413D52BF3D14100C34FEB /* SignInGoogleHelper.swift */; };
 		2AA413D92BF3D17100C34FEB /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 2AA413D82BF3D17100C34FEB /* GoogleSignIn */; };
 		2AA413DB2BF3D17100C34FEB /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 2AA413DA2BF3D17100C34FEB /* GoogleSignInSwift */; };
@@ -112,6 +114,8 @@
 		2A8447332BF36B9400AE319A /* SignUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVC.swift; sourceTree = "<group>"; };
 		2A8447352BF36BD600AE319A /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		2A8447372BF3850C00AE319A /* SignInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInVC.swift; sourceTree = "<group>"; };
+		2A8E20B02BFF8EB600239C09 /* CircleAnimateText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleAnimateText.swift; sourceTree = "<group>"; };
+		2A8E20B22BFF913400239C09 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		2AA413D52BF3D14100C34FEB /* SignInGoogleHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInGoogleHelper.swift; sourceTree = "<group>"; };
 		2AA413DC2BF3D1D400C34FEB /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		9C1F0F892BF5E02E002D680D /* PlayingListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayingListVC.swift; sourceTree = "<group>"; };
@@ -244,6 +248,7 @@
 			children = (
 				F41E81502BFFA430001DA97C /* Cell */,
 				9C1F0FB92BFB939E002D680D /* TestResultView.swift */,
+				9C1F0FDF2BFCB351002D680D /* ExpandableTableViewCell.swift */,
 				9C1F0FBB2BFB93C5002D680D /* TestView.swift */,
 				9C1F0FBD2BFB9479002D680D /* TestIntroView.swift */,
 				9C1F0FC52BFBA9E6002D680D /* CarouselLayout.swift */,
@@ -265,6 +270,8 @@
 				9C1F0FCD2BFBABE5002D680D /* MyPageWordViewController.swift */,
 				9C1F0FCF2BFBAC25002D680D /* MyPageModalViewController.swift */,
 				9C1F0F892BF5E02E002D680D /* PlayingListVC.swift */,
+				2A8E20B02BFF8EB600239C09 /* CircleAnimateText.swift */,
+				2A8E20B22BFF913400239C09 /* LaunchView.swift */,
 				9C1F0F9B2BF6F4E8002D680D /* DictionaryVC.swift */,
 				9C1F0F9D2BF732EB002D680D /* InvitingVC.swift */,
 				9C1F0F8B2BF5E0BC002D680D /* MyInfoVC.swift */,
@@ -357,7 +364,6 @@
 				9C1F0FB72BFB9332002D680D /* TestFriendViewCell.swift */,
 				9C1F0FDD2BFCB33F002D680D /* DefaultTableViewCell.swift */,
 				9C1F0FE12BFDCEC4002D680D /* InvitedFriendCell.swift */,
-				9C1F0FDF2BFCB351002D680D /* ExpandableTableViewCell.swift */,
 				F4ECA7682BFDDCBF00CD24E6 /* PlayingListViewCell.swift */,
 				2A1166002BFB723D000F61B0 /* WordbookCell.swift */,
 			);
@@ -470,6 +476,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C1F0F9C2BF6F4E8002D680D /* DictionaryVC.swift in Sources */,
+				2A8E20B12BFF8EB600239C09 /* CircleAnimateText.swift in Sources */,
 				9C1F0FA02BF7332F002D680D /* MyPageVC.swift in Sources */,
 				9C1F0FD62BFBAD52002D680D /* LabelFactory.swift in Sources */,
 				9C1F0FD02BFBAC25002D680D /* MyPageModalViewController.swift in Sources */,
@@ -521,6 +528,7 @@
 				2A6C0CF12BF998670035B405 /* ProfileViewModel.swift in Sources */,
 				9C1F0FBA2BFB939E002D680D /* TestResultView.swift in Sources */,
 				9C1F0FE02BFCB351002D680D /* ExpandableTableViewCell.swift in Sources */,
+				2A8E20B32BFF913400239C09 /* LaunchView.swift in Sources */,
 				2A511B152BF5FCFB00CDA177 /* User.swift in Sources */,
 				2A1165FF2BFB2175000F61B0 /* RadioButton.swift in Sources */,
 				2A1165FD2BFB20B9000F61B0 /* UIColor+Ext.swift in Sources */,
@@ -603,7 +611,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.1;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -660,7 +668,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.1;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
