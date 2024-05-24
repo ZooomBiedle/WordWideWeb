@@ -80,7 +80,6 @@ class InvitingVC: UIViewController {
                     let dueDate = invitation.dueDate
                     let id = invitation.wordbookId
                     let title = invitation.title
-                    print("")
                     guard let dueDateComponents = convertToDateComponents(from: dueDate) else { return  }
                     pushNotificationHelper.pushNotification(test: title, time: dueDateComponents, identifier: "\(id)")
                     

@@ -14,8 +14,6 @@ class TabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //        setTabBar()
-        //        setDefaultTabBarImages()
         //setupTabBar()
         setupTabBarItems()
         NotificationCenter.default.addObserver(self, selector: #selector(showPage(_:)), name: NSNotification.Name("showPage"), object: nil)
@@ -45,63 +43,6 @@ class TabBarController: UITabBarController {
         self.present(testIntroViewController, animated: true)
         
     }
-    
-    //    func setTabBar() {
-    //
-    //        let appearance = UITabBarAppearance()
-    //        appearance.configureWithOpaqueBackground()
-    //        tabBar.standardAppearance = appearance
-    //        //tabBar.tintColor = .black
-    //        tabBar.backgroundColor = .white
-    //        tabBar.layer.cornerRadius = 30
-    //        tabBar.items?.forEach {
-    //            $0.imageInsets = UIEdgeInsets(top: 50, left: 0, bottom: -50, right: 0)
-    //        }
-    //        tabBar.tintColor = .mainBtn
-    //        tabBar.unselectedItemTintColor = .lightGray
-    //        self.selectedIndex = 0
-    //
-    //        // 탭바 높이 설정
-    //        let customHeight: CGFloat = 90
-    //        var tabFrame = tabBar.frame
-    //        tabFrame.size.height = customHeight
-    //        tabFrame.origin.y = view.frame.size.height - customHeight
-    //        tabBar.frame = tabFrame
-    //    }
-    //
-    //    func setDefaultTabBarImages() {
-    //        updateTabBarImages()
-    //    }
-    //
-    //    fileprivate func updateTabBarImages() {
-    //        viewControllers = [
-    //            createNavController(for: MyPageVC(), image: UIImage(systemName: "house.circle.fill")!),
-    //            createNavController(for: PlayingListVC(), image: UIImage(systemName: "magnifyingglass.circle")!),
-    //            createNavController(for: DictionaryVC(), image: UIImage(systemName: "plus.circle")!),
-    //            createNavController(for: InvitingVC(), image: UIImage(systemName: "envelope.circle")!),
-    //            createNavController(for: MyInfoVC(), image: UIImage(systemName: "person.crop.circle")!)
-    //        ]
-    //    }
-    //
-    //    fileprivate func createNavController(for rootViewController: UIViewController, image: UIImage) -> UIViewController {
-    //        let navController = UINavigationController(rootViewController: rootViewController)
-    //        navController.navigationBar.isTranslucent = false
-    //        navController.navigationBar.backgroundColor = UIColor(named: "bgColor")
-    //        navController.tabBarItem.image = image.withRenderingMode(.alwaysOriginal) // 이미지 크기 유지
-    //        navController.interactivePopGestureRecognizer?.delegate = nil // 스와이프 제스처 enable true
-    //        return navController
-    //    }
-    
-    
-    //
-    //    private func configureInvitationViewController(_ viewController: TestViewController, wordbook: Wordbook) {
-    //
-    //        //viewController.taskname = "new"
-    //        viewController.modalPresentationStyle = .fullScreen
-    //        viewController.hidesBottomBarWhenPushed = true
-    //        viewController.view.isOpaque = false
-    //    }
-    
 
     
     private func setupTabBarItems() {
@@ -141,12 +82,3 @@ class TabBarController: UITabBarController {
     }
     
 }
-
-//extension UIImage {
-//    func resizeImage(to size: CGSize) -> UIImage? {
-//        UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
-//        defer { UIGraphicsEndImageContext() }
-//        draw(in: CGRect(origin: .zero, size: size))
-//        return UIGraphicsGetImageFromCurrentImageContext()
-//    }
-//}

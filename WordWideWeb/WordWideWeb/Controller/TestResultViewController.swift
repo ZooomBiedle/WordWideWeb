@@ -97,10 +97,8 @@ class TestResultViewController: UIViewController {
     func makeWrongWordsList(){
         var index = 0
         for res in result {
-            print("res \(res)")
             if res != .right {
                 if let wrongword = block[index]["term"] {
-                    print(wrongword)
                     wrongwordList.append(wrongword)
                 }
             }

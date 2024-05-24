@@ -367,7 +367,6 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     @objc private func deleteAccountTapped() {
         // 재인증 확인 대화 상자 표시
         let alertController = UIAlertController(title: "Bye", message: "You have been logged out. \n See you next time!", preferredStyle: .alert)
-//        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alertController.addAction(UIAlertAction(title: "OK", style: .destructive, handler: { _ in
             self.activityIndicator.startAnimating()
             self.reauthenticateAndDeleteAccount()

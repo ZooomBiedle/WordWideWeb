@@ -24,7 +24,6 @@ class DefaultTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.pretendard(size: 14, weight: .regular)
         label.numberOfLines = 2
-//        label.textAlignment = .right
         return label
     }()
     
@@ -43,11 +42,7 @@ class DefaultTableViewCell: UITableViewCell {
     }
     
     func setConstraints() {
-        
-//        contentView.addSubview(profileImageView)
-//        contentView.addSubview(titleLabel)
-//        contentView.addSubview(dateLabel)
-        
+    
         profileImageView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(20)
             make.top.equalToSuperview().offset(20)

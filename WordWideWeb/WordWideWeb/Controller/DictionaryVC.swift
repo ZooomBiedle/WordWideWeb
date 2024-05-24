@@ -122,11 +122,9 @@ extension DictionaryVC: UISearchBarDelegate {
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         guard let keyword = searchBar.text else { return }
-        print("Search query: \(keyword)")
         NetworkManager.shared.fetchAPI(query: keyword) { [weak self] items in
             DispatchQueue.main.async {
                 guard let self = self else { return }
-                print("Items received: \(items.count)")
                 self.receivedItem = items
             }
         }

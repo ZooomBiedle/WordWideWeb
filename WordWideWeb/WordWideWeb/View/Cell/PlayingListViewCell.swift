@@ -83,7 +83,6 @@ class PlayingListViewCell: UITableViewCell {
     }
     
     private func updatePplLabel() {
-        print("updatePplLabel \(nowPplNum) / \(pplNum)")
         pplLabel.text = "\(nowPplNum) / \(pplNum)"
     }
     

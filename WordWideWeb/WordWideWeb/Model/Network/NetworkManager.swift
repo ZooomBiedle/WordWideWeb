@@ -183,12 +183,7 @@ extension NetworkManager: XMLParserDelegate {
             currentSenseElement = nil
         }
     }
-    
-//    // 파싱이 끝날 때 호출됨
-//    func parserDidEndDocument(_ parser: XMLParser) {
-//        print("Parsing finished")
-//    }
-    
+  
     // 파싱 중 에러 발생 시 호출됨
     func parser(_ parser: XMLParser, parseErrorOccurred parseError: Error) {
         print("Error parsing XML: \(parseError.localizedDescription)")

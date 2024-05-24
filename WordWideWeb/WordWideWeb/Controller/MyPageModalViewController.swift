@@ -29,14 +29,6 @@ class MyPageModalViewController: UIViewController {
         return label
     }()
     
-//    lazy var pronunciationLabel: UILabel = {
-//        let label = UILabel()
-//        label.text = "미국식 [ wɜːrld ] 영국식 [ wɜːld ]"
-//        label.textAlignment = .center
-//        label.textColor = .white
-//        return label
-//    }()
-    
     lazy var stackview: UIStackView = {
         let stv = UIStackView()
         stv.axis = .vertical
@@ -81,11 +73,7 @@ class MyPageModalViewController: UIViewController {
             make.leading.equalToSuperview().offset(30)
             make.height.equalTo(48)
         }
-//        view.addSubview(pronunciationLabel)
-//        pronunciationLabel.snp.makeConstraints { make in
-//            make.top.equalToSuperview().offset(80)
-//            make.leading.equalToSuperview().offset(120)
-//        }
+
         view.addSubview(stackview)
         stackview.snp.makeConstraints { make in
             make.top.equalTo(wordLabel.snp.bottom).offset(20)

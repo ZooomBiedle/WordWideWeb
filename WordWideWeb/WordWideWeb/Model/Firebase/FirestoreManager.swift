@@ -298,7 +298,6 @@ final class FirestoreManager {
                 print("failed")
             }
         }
-        print("wordbooks == \(wordbooks)")
         return wordbooks
     }
     
@@ -327,7 +326,6 @@ final class FirestoreManager {
             wordbook.wordCount = wordCount
             wordbooks.append(wordbook)
         }
-        print("wordbooks == \(wordbooks)")
         return wordbooks
     }
     
@@ -533,19 +531,6 @@ final class FirestoreManager {
         try await Firestore.firestore().collection("invitations").document(invitation.id).setData(data)
     }
 
-    // 초대 전송
-//    func sendInvitation(to recipientUID: String, wordbookId: String, title: String) async throws {
-//        let currentUserUID = Auth.auth().currentUser!.uid
-//        let invitationData: [String: Any] = [
-//            "from": currentUserUID,
-//            "to": recipientUID,
-//            "wordbookId": wordbookId,
-//            "title": title,
-//            "timestamp": FieldValue.serverTimestamp()
-//        ]
-//
-//        try await db.collection("invitations").addDocument(data: invitationData)
-//    }
 
     // 초대 수락
     func acceptInvitation(invitation: Invitation) async throws {
@@ -568,12 +553,7 @@ final class FirestoreManager {
             "attendees": FieldValue.arrayRemove([invitation.to])
         ])
     }
-    
-    // 초대 가져오기
-    //    func fetchInvitations(for userId: String) async throws -> [Invitation] {
-    //        let snapshot = try await db.collection("invitations").whereField("to", isEqualTo: userId).getDocuments()
-    //    }
-    
+
     // MARK: - Helper Methods
     
     private func fetchDocument(collection: String, documentID: String) async throws -> DocumentSnapshot {

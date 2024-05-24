@@ -55,7 +55,6 @@ class TestViewController: UIViewController {
         
         status = Array(repeating: .none, count: block.count)
         
-        print("currentIndex\(currentIndex)")
         setTimer()
         reloadQView()
     }
@@ -83,7 +82,6 @@ class TestViewController: UIViewController {
     }
     
     private func reloadQView(){
-        print("currentIndex\(currentIndex)")
         if let def = block[currentIndex]["definition"] {
             testView.bindQ(page: currentIndex+1, definition: def)
         }
@@ -148,19 +146,15 @@ class TestViewController: UIViewController {
     
     @objc private func checkAnswer(){
         guard let userInput = testView.answerLabel.text else {
-            print("No answer entered")
             return
         }
         if answer == userInput {
             status[currentIndex] = .right
-            print("right!")
             reloadQView()
         } else {
             status[currentIndex] = .wrong
-            print("wrong")
             reloadQView()
         }
-        print(status)
         if !status.contains(.none){
             moveToResultView()
         }

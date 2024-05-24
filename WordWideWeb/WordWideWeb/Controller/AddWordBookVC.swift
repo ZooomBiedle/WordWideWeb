@@ -210,18 +210,14 @@ class AddWordBookVC: UIViewController, UITextFieldDelegate, UICollectionViewDele
         deadlineDatePicker.snp.makeConstraints { make in
             make.leading.equalTo(timePeriodYesButton.snp.leading)
             make.centerY.equalTo(deadlineLabel)
-            //            make.height.equalTo(20)
         }
         
         publicButton.snp.makeConstraints { make in
-            //            make.top.equalTo(deadlineLabel.snp.bottom).offset(36)
             make.leading.equalTo(attendeesLabel.snp.trailing).offset(60)
             make.centerY.equalTo(attendeesLabel)
-            //            make.trailing.equalTo(view.snp.centerX).offset(-10)
         }
         
         privateButton.snp.makeConstraints { make in
-            //            make.top.equalTo(deadlineLabel.snp.bottom).offset(36)
             make.leading.equalTo(publicButton.snp.trailing).offset(24)
             make.centerY.equalTo(attendeesLabel)
         }
@@ -232,10 +228,8 @@ class AddWordBookVC: UIViewController, UITextFieldDelegate, UICollectionViewDele
         }
         
         attendeesStepper.snp.makeConstraints { make in
-            //            make.top.equalTo(deadlineDatePicker.snp.bottom).offset(24)
             make.centerY.equalTo(inviteLabel.snp.centerY)
             make.trailing.equalTo(view).offset(-24)
-            //            make.centerY.equalTo(attendeesLabel)
         }
         
         attendeesCountLabel.snp.makeConstraints { make in

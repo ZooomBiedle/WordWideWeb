@@ -32,15 +32,7 @@ class MyPageCollectionViewCell: UICollectionViewCell {
         stackView.axis = .vertical
         return stackView
     }()
-    
-//    lazy var wordLabel: UILabel = {
-//        let label = UILabel()
-//        label.text = "let"
-//        label.textAlignment = .center
-//        label.layer.cornerRadius = 15
-//        label.backgroundColor = UIColor(named: "bgColor")
-//        return label
-//    }()
+
     
     lazy var wordButton: UIButton = {
         let button = UIButton()
@@ -102,13 +94,7 @@ class MyPageCollectionViewCell: UICollectionViewCell {
         whiteView.snp.makeConstraints { make in
             make.height.equalTo(vStackView.snp.height).multipliedBy(0.4)
         }
-        
-//        self.addSubview(wordButton)
-//        wordButton.snp.makeConstraints { make in
-//            make.top.equalToSuperview().offset(30)
-//            make.leading.equalToSuperview().offset(20)
-//        }
-        
+
         self.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(290)
